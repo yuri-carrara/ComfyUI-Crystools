@@ -94,6 +94,11 @@ class CGPUInfo:
                 logger.info(f"GPU/s:")
 
                 for deviceIndex in range(self.cudaDevicesFound):
+                    cuda_visible_devices = os.getenv("CUDA_VISIBLE_DEVICES")
+                    if cuda_visible_devices:
+                        visible_list = [int(x) for x in cuda_visible_devices.split(',') if x.strip() != ""]
+                        if deviceIndex not in visible_list:
+                            continue
                     deviceHandle = self.deviceGetHandleByIndex(deviceIndex)
 
                     gpuName = self.deviceGetName(deviceHandle, deviceIndex)
